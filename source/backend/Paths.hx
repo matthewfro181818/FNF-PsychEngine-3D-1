@@ -29,45 +29,6 @@ class Paths
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 	inline public static var VIDEO_EXT = "mp4";
 
-	static var tmpPNGBytes:BitmapData = null;
-
-	static public function getBitmapPNG(key:String, ?folder:String)
-	{
-		tmpPNGBytes = BitmapData.fromFile(Paths.image(key, folder));
-		var texture = FlxG.stage.context3D.createTexture(tmpPNGBytes.width, tmpPNGBytes.height, Context3DTextureFormat.BGRA, false);
-		texture.uploadFromBitmapData(tmpPNGBytes);
-		tmpPNGBytes.dispose();
-		tmpPNGBytes = null;
-		return texture;
-	}
-
-	static public function getImagePNG(key:String, ?folder:String)
-	{
-		if (!Cashew.exists(key))
-		{
-			var tex = getBitmapPNG(key, folder);
-			var gfx = FlxGraphic.fromBitmapData(BitmapData.fromTexture(tex), false, key, folder, false);
-			gfx.destroyOnNoUse = false;
-			Cashew.cache(key, gfx, tex);
-		}
-		return Cashew.get(key);
-	}
-
-	static public function getSparrowAtlasPNG(key:String, ?folder:String)
-	{
-		return FlxAtlasFrames.fromSparrow(getImagePNG(key), xml(key, folder));
-	}
-
-	static public function getPackerAtlasPNG(key:String, ?folder:String)
-	{
-		return FlxAtlasFrames.fromSpriteSheetPacker(getImagePNG(key, folder), text(key, folder,"images"));
-	}
-
-	inline static public function text(key:String, ?location:String = "data")
-	{
-		return file(key, location, "txt");
-	}
-
 	public static function excludeAsset(key:String) {
 		if (!dumpExclusions.contains(key))
 			dumpExclusions.push(key);
@@ -117,6 +78,61 @@ class Paths
 		// flags everything to be cleared out next unused memory clear
 		localTrackedAssets = [];
 		#if !html5 openfl.Assets.cache.clear("songs"); #end
+	}
+
+	public static function freeGraphicsFromMemory()
+	{
+		var protectedGfx:Array<FlxGraphic> = [];
+		function checkForGraphics(spr:Dynamic)
+		{
+			try
+			{
+				var grp:Array<Dynamic> = Reflect.getProperty(spr, 'members');
+				if(grp != null)
+				{
+					//trace('is actually a group');
+					for (member in grp)
+					{
+						checkForGraphics(member);
+					}
+					return;
+				}
+			}
+
+			//trace('check...');
+			try
+			{
+				var gfx:FlxGraphic = Reflect.getProperty(spr, 'graphic');
+				if(gfx != null)
+				{
+					protectedGfx.push(gfx);
+					//trace('gfx added to the list successfully!');
+				}
+			}
+			//catch(haxe.Exception) {}
+		}
+
+		for (member in FlxG.state.members)
+			checkForGraphics(member);
+
+		if(FlxG.state.subState != null)
+			for (member in FlxG.state.subState.members)
+				checkForGraphics(member);
+
+		for (key in currentTrackedAssets.keys())
+		{
+			// if it is not currently contained within the used local assets
+			if (!dumpExclusions.contains(key))
+			{
+				var graphic:FlxGraphic = currentTrackedAssets.get(key);
+				if(!protectedGfx.contains(graphic))
+				{
+					destroyGraphic(graphic); // get rid of the graphic
+					currentTrackedAssets.remove(key); // and remove the key from local cache map
+					//trace('deleted $key');
+				}
+			}
+		}
 	}
 
 	inline static function destroyGraphic(graphic:FlxGraphic)
@@ -180,27 +196,6 @@ class Paths
 	inline static public function lua(key:String, ?folder:String)
 		return getPath('$key.lua', TEXT, folder, true);
 
-	inline static public function obj(key:String, ?folder:String)
-	{
-		return getPath('models/$key.obj', BINARY, folder);
-	}
-	inline static public function dae(key:String, ?folder:String)
-	{
-		return getPath('models/$key.dae', BINARY, folder);
-	}
-	inline static public function md2(key:String, ?library:String, ?folder:String)
-	{
-		return getPath('models/$key.md2', BINARY, folder);
-	}
-	inline static public function md5(key:String, ?library:String, ?folder:String)
-	{
-		return getPath('models/$key.md5', BINARY, folder);
-	}
-	inline static public function awd(key:String, ?library:String, ?folder:String)
-	{
-		return getPath('models/$key.awd', BINARY, folder);
-	}
-
 	static public function video(key:String)
 	{
 		#if MODS_ALLOWED
@@ -256,7 +251,7 @@ class Paths
 
 			if (bitmap == null)
 			{
-				trace('oh no its returning null NOOOO ($file)');
+				trace('Bitmap not found: $file | key: $key');
 				return null;
 			}
 		}
