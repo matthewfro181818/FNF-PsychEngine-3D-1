@@ -81,6 +81,41 @@ class Character extends FlxSprite
 	public var originalFlipX:Bool = false;
 	public var editorIsPlayer:Null<Bool> = null;
 
+	public var canAutoAnim:Bool = true;
+	public var canAutoIdle:Bool = true;
+
+	public var initFacing:Int = FlxObject.RIGHT;
+
+	public var initWidth:Float = -1;
+	public var initFrameWidth:Int = -1;
+	public var initHeight:Float;
+
+	// 3D
+	public var isModel:Bool = false;
+	public var modelView:ModelView;
+	public var beganLoading:Bool = false;
+	public var modelName:String = "";
+	public var modelScale:Float = 1;
+	public var model:ModelThing;
+	public var modelType:String = "md2";
+	public var initYaw:Float = 0;
+	public var initPitch:Float = 0;
+	public var initRoll:Float = 0;
+	public var xOffset:Float = 0;
+	public var yOffset:Float = 0;
+	public var zOffset:Float = 0;
+	public var viewX:Float = 750;
+	public var viewY:Float = 750;
+	public var ambient:Float = 1;
+	public var specular:Float = 1;
+	public var diffuse:Float = 1;
+	public var animSpeed:Map<String, Float> = new Map<String, Float>();
+	public var noLoopList:Array<String> = [];
+	public var isGlass:Bool = false;
+
+	public static var modelMutex:Bool = false;
+	public static var modelMutexThing:ModelThing;
+
 	public function new(x:Float, y:Float, ?character:String = 'bf', ?isPlayer:Bool = false)
 	{
 		super(x, y);
@@ -93,6 +128,97 @@ class Character extends FlxSprite
 		
 		switch(curCharacter)
 		{
+			case 'atlanta':
+				frames = Paths.getSparrowAtlas("characters/atlanta");
+				animation.addByPrefix('idle', 'idle', 12, false);
+				animation.addByPrefix('singDOWN', 'singDOWN', 12, false);
+				animation.addByPrefix('singDOWNmiss', 'missDOWN', 12, false);
+				animation.addByPrefix('singLEFTmiss', 'missLEFT', 12, false);
+				animation.addByPrefix('singRIGHTmiss', 'missRIGHT', 12, false);
+				animation.addByPrefix('singUPmiss', 'missUP', 12, false);
+				animation.addByPrefix('singLEFT', 'singLEFT', 12, false);
+				animation.addByPrefix('singRIGHT', 'singRIGHT', 12, false);
+				animation.addByPrefix('singUP', 'singUP', 12, false);
+
+				addOffset('idle');
+				addOffset("singDOWN", -4, -135);
+				addOffset("singDOWNmiss", -4, -135);
+				addOffset("singLEFT", -18, -27);
+				addOffset("singLEFTmiss", -18, -27);
+				addOffset("singRIGHT", -2, 2);
+				addOffset("singRIGHTmiss", -2, 2);
+				addOffset("singUP", 20, 38);
+				addOffset("singUPmiss", 20, 38);
+
+				playAnim('idle');
+				posOffsets = [-180, 0];
+				camOffsets = [180, 0];
+
+			case 'lily':
+				frames = Paths.getAtlas("characters/lily");
+				
+				animation.addByPrefix('idle', 'oIdle');
+				animation.addByPrefix('singUP', 'oUp');
+				animation.addByPrefix('singLEFT', 'oLeft');
+				animation.addByPrefix('singRIGHT', 'oRight');
+				animation.addByPrefix('singDOWN', 'oDOwn');
+				animation.addByPrefix('singUPmiss', 'oUpMiss');
+				animation.addByPrefix('singLEFTmiss', 'oLeftMiss');
+				animation.addByPrefix('singRIGHTmiss', 'oRightMiss');
+				animation.addByPrefix('singDOWNmiss', 'oDownMiss');
+				animation.addByPrefix('hit', 'oHit');
+				animation.addByPrefix('dodge', 'oDodge');
+
+
+				addOffset('idle');
+				addOffset("singDOWN", 108, -181);
+				addOffset("singDOWNmiss", 108, -190);
+				addOffset("singLEFTmiss", 116, -5);
+				addOffset("singRIGHTmiss", 1, -48);
+				addOffset("singUPmiss", 225, 77);
+				addOffset("singLEFT", 131, -2);
+				addOffset("singRIGHT", -2, -23);
+				addOffset("singUP", 225, 77);
+				addOffset("dodge", 233, 66);
+				addOffset("hit", 259, 131);
+
+				playAnim('idle');
+
+			case 'prisma':
+				modelName = "prisma";
+				modelScale = 50;
+				var multiplier = Conductor.bpm / 100;
+				animSpeed = [
+					"default" => 2.1 * multiplier,
+					"idle" => 1.5 * multiplier,
+					"singLEFT" => 2.5 * multiplier
+				];
+				for (thing in ["singUPEnd", "singLEFTEnd", "singRIGHTEnd", "singDOWNEnd"])
+					animSpeed[thing] = 1.5;
+				isModel = true;
+				noLoopList = [
+					"idle", "singUP", "singLEFT", "singRIGHT", "singDOWN", "singUPEnd", "singLEFTEnd", "singRIGHTEnd", "singDOWNEnd", "idleEnd"
+				];
+				ambient = 1;
+				specular = 1;
+				diffuse = 1;
+				initYaw = -50;
+				isGlass = true;
+				viewX = 600;
+				viewY = 600;
+				if (isPlayer)
+					posOffsets = [viewX / 2, -550];
+				else
+					posOffsets = [-viewX / 2, -550];
+				if (isPlayer)
+					camOffsets = [-viewX / 2, viewY / 2];
+				else
+					camOffsets = [viewX / 2, viewY / 2];
+
+			case 'nothing':
+				antialiasing = false;
+				loadGraphic(FlxGraphic.fromRectangle(1, 1, FlxColor.TRANSPARENT));
+
 			case 'pico-speaker':
 				skipDance = true;
 				loadMappedAnims();
