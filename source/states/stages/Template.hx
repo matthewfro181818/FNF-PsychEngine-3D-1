@@ -1,6 +1,7 @@
 package states.stages;
 
 import states.stages.objects.*;
+import flixel.addons.effects.FlxSkewedSprite;
 
 class Template extends BaseStage
 {
@@ -175,14 +176,15 @@ class Template extends BaseStage
 				sun.scrollFactor.set(0.2, 0.2);
 				add(sun);
 
-				mtn = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/mountain"));
+				var mtn = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/mountain"));
 				mtn.setPosition(FlxG.width / 2 - mtn.width / 2, 100);
 				mtn.antialiasing = true;
 				mtn.scrollFactor.set(0.33, 0.33);
 				add(mtn);
 
+				var skewGrid = new FlxSkewedSprite();
+            	var skewScale:Float = -0.1;
 				skewScale = -0.1;
-				skewGrid = new FlxSkewedSprite();
 				skewGrid.loadGraphic(Paths.getImageFunk("prismaStage/tile"));
 				skewGrid.antialiasing = true;
 				skewGrid.setPosition(FlxG.width / 2 - skewGrid.width / 2, 600);
@@ -208,8 +210,9 @@ class Template extends BaseStage
 				mtn.scrollFactor.set(0.33, 0.33);
 				add(mtn);
 
+	            var skewScale:Float = -0.1;
 				skewScale = -0.07;
-				skewGrid = new FlxSkewedSprite();
+				var skewGrid = new FlxSkewedSprite();
 				skewGrid.loadGraphic(Paths.getImageFunk("prismaStage/tile2"));
 				skewGrid.antialiasing = true;
 				skewGrid.setPosition(FlxG.width / 2 - skewGrid.width / 2, 600);
