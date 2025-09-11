@@ -245,5 +245,20 @@ class Template extends BaseStage
 				stageCurtains.antialiasing = true;
 				add(stageCurtains);
 		}
+		if (curSong.toLowerCase() == 'Kickin') {
+			curStage = 'bfStage';
+        }
+		if (curSong.toLowerCase() == 'Zombie-Flower') {
+			curStage = 'lilyStage';
+        }
+		if (curSong.toLowerCase() == 'Tune-A-Fish') {
+			curStage = 'atlantaStage';
+        }
+		if (curSong.toLowerCase() == 'Fresnel') {
+			curStage = 'prismaStage';
+        }
+		if (curSong.toLowerCase() == 'SiO2') {
+			curStage = 'prismaStage2';
+        }
 	}
 }
