@@ -4,151 +4,243 @@ import states.stages.objects.*;
 
 class Template extends BaseStage
 {
-	// If you're moving your stage from PlayState to a stage file,
-	// you might have to rename some variables if they're missing, for example: camZooming -> game.camZooming
+	var stageCheck:String = 'stage';
+
+	var defaultCamZoom:Float = 1.05;
+
+	public static var curStage:String = '';
 
 	override function create()
 	{
-		// Spawn your stage sprites here.
-		// Characters are not ready yet on this function, so you can't add things above them yet.
-		// Use createPost() if that's what you want to do.
-	}
-	
-	override function createPost()
-	{
-		// Use this function to layer things above characters!
-	}
-
-	override function update(elapsed:Float)
-	{
-		// Code here
-	}
-
-	override function destroy()
-	{
-		// Code here
-	}
-
-	
-	override function countdownTick(count:Countdown, num:Int)
-	{
-		switch(count)
+		switch (stageCheck)
 		{
-			case THREE: //num 0
-			case TWO: //num 1
-			case ONE: //num 2
-			case GO: //num 3
-			case START: //num 4
-		}
-	}
+			case 'lilyStage':
+				curStage = 'lilyStage';
 
-	override function startSong()
-	{
-		// Code here
-	}
+				defaultCamZoom = 0.80;
 
-	// Steps, Beats and Sections:
-	//    curStep, curDecStep
-	//    curBeat, curDecBeat
-	//    curSection
-	override function stepHit()
-	{
-		// Code here
-	}
-	override function beatHit()
-	{
-		// Code here
-	}
-	override function sectionHit()
-	{
-		// Code here
-	}
+				var bg:FlxSprite = new FlxSprite(-600, -300);
+				bg.frames = Paths.getSparrowAtlasFunk("lily/stuff");
+				bg.animation.addByPrefix("idle", "stage", 24, false);
+				bg.scrollFactor.set(0.7, 0.7);
+				bg.antialiasing = true;
+				bg.active = false;
+				bg.animation.play("idle", true);
+				add(bg);
 
-	// Substates for pausing/resuming tweens and timers
-	override function closeSubState()
-	{
-		if(paused)
-		{
-			//timer.active = true;
-			//tween.active = true;
-		}
-	}
+				var roadinner = new FlxSprite();
+				roadinner.frames = Paths.getSparrowAtlasFunk("lily/stuff");
+				roadinner.animation.addByPrefix("idle", "roadinner", 24, false);
+				roadinner.scrollFactor.set(0.8, 0.8);
+				roadinner.antialiasing = true;
+				roadinner.animation.play("idle", true);
+				roadinner.scale.x = 10;
+				roadinner.updateHitbox();
+				roadinner.setPosition(-600, 274);
+				roadinner.active = false;
+				add(roadinner);
 
-	override function openSubState(SubState:flixel.FlxSubState)
-	{
-		if(paused)
-		{
-			//timer.active = false;
-			//tween.active = false;
-		}
-	}
-
-	// For events
-	override function eventCalled(eventName:String, value1:String, value2:String, flValue1:Null<Float>, flValue2:Null<Float>, strumTime:Float)
-	{
-		switch(eventName)
-		{
-			case "My Event":
-		}
-	}
-	override function eventPushed(event:objects.Note.EventNote)
-	{
-		// used for preloading assets used on events that doesn't need different assets based on its values
-		switch(event.event)
-		{
-			case "My Event":
-				//precacheImage('myImage') //preloads images/myImage.png
-				//precacheSound('mySound') //preloads sounds/mySound.ogg
-				//precacheMusic('myMusic') //preloads music/myMusic.ogg
-		}
-	}
-	override function eventPushedUnique(event:objects.Note.EventNote)
-	{
-		// used for preloading assets used on events where its values affect what assets should be preloaded
-		switch(event.event)
-		{
-			case "My Event":
-				switch(event.value1)
+				var light = new FlxSprite(80, 0);
+				light.frames = Paths.getSparrowAtlasFunk("lily/morestuff");
+				light.animation.addByPrefix("idle", "light", 24, false);
+				light.antialiasing = true;
+				light.scrollFactor.set(0.9, 0.9);
+				add(light);
+				bopSprites.push(function()
 				{
-					// If value 1 is "blah blah", it will preload these assets:
-					case 'blah blah':
-						//precacheImage('myImageOne') //preloads images/myImageOne.png
-						//precacheSound('mySoundOne') //preloads sounds/mySoundOne.ogg
-						//precacheMusic('myMusicOne') //preloads music/myMusicOne.ogg
+					light.animation.play("idle", true);
+				});
+				light.animation.play("idle", true);
 
-					// If value 1 is "coolswag", it will preload these assets:
-					case 'coolswag':
-						//precacheImage('myImageTwo') //preloads images/myImageTwo.png
-						//precacheSound('mySoundTwo') //preloads sounds/mySoundTwo.ogg
-						//precacheMusic('myMusicTwo') //preloads music/myMusicTwo.ogg
-					
-					// If value 1 is not "blah blah" or "coolswag", it will preload these assets:
-					default:
-						//precacheImage('myImageThree') //preloads images/myImageThree.png
-						//precacheSound('mySoundThree') //preloads sounds/mySoundThree.ogg
-						//precacheMusic('myMusicThree') //preloads music/myMusicThree.ogg
+				var light2 = light.clone();
+				light2.x += 1053;
+				add(light2);
+				bopSprites.push(function()
+				{
+					light2.animation.play("idle", true);
+				});
+				light2.animation.play("idle", true);
+
+				var lilySoil = new FlxSprite(-200, 400);
+				lilySoil.frames = Paths.getSparrowAtlasFunk("lily/morestuff");
+				lilySoil.animation.addByPrefix("idle", "soil", 24, false);
+				lilySoil.antialiasing = true;
+				lilySoil.scrollFactor.set(0.9, 0.9);
+				add(lilySoil);
+				bopSprites.push(function()
+				{
+					lilySoil.animation.play("idle", true);
+				});
+				lilySoil.animation.play("idle", true);
+
+				var roadfront = new FlxSprite(-600, 581);
+				roadfront.frames = Paths.getSparrowAtlasFunk("lily/stuff");
+				roadfront.animation.addByPrefix("idle", "roadfront", 24, false);
+				roadfront.scrollFactor.set(0.9, 0.9);
+				roadfront.antialiasing = true;
+				roadfront.active = false;
+				roadfront.animation.play("idle", true);
+				add(roadfront);
+
+				var glasses = new FlxTypedGroup<FlxSprite>();
+
+				var glass = new FlxSprite(0, 0);
+				glass.frames = Paths.getSparrowAtlasFunk("lily/morestuff");
+				glass.antialiasing = true;
+				glass.animation.addByPrefix("1", "glassOne", 24, false);
+				glass.animation.addByPrefix("2", "glassTwo", 24, false);
+				glass.animation.addByPrefix("3", "glassThree", 24, false);
+				glass.animation.addByPrefix("4", "glassFour", 24, false);
+				glass.animation.addByPrefix("5", "glassFive", 24, false);
+				glass.scrollFactor.set(1, 1);
+				glass.animation.play("1");
+				glass.setPosition(-670, 850);
+				glass.active = false;
+				glasses.add(glass);
+				for (i in [[2, 608], [3, 1239], [4, 1948], [5, 2521]])
+				{
+					var moreGlass = glass.clone();
+					moreGlass.animation.play(Std.string(i[0]));
+					moreGlass.setPosition(-670 + i[1], 850);
+					moreGlass.active = false;
+					glasses.add(moreGlass);
 				}
+				// var theTweens:Map<FlxSprite, FlxTween> = [];
+				// bopSprites.push(function()
+				// {
+				// 	glasses.forEachAlive(function(sprite)
+				// 	{
+				// 		sprite.offset.y = 0;
+				// 		if (theTweens[sprite] != null)
+				// 		{
+				// 			theTweens[sprite].start();
+				// 		}
+				// 		else
+				// 		{
+				// 			theTweens[sprite] = FlxTween.tween(sprite, {"offset.y": -25}, Conductor.crochet / 1000 / 2, {type: PINGPONG});
+				// 		}
+				// 	});
+				// });
+				// onDestroy.push(function()
+				// {
+				// 	for (twn in theTweens)
+				// 	{
+				// 		if (twn != null && twn.active)
+				// 		{
+				// 			twn.cancel();
+				// 			twn.camFollow);
+				// 		}
+				// 		twn = null;
+				// 	}
+				// 	theTweens.clear();
+				// });
+
+				add(glasses);
+			case 'bfStage':
+				curStage = 'bfStage';
+
+				defaultCamZoom = 0.75;
+
+				var bg:FlxSprite = new FlxSprite(-500, -200).loadGraphic(Paths.getImageFunk('bfStage/bg2'));
+				bg.antialiasing = true;
+				bg.active = false;
+				bg.scrollFactor.set(0.3, 0.3);
+				add(bg);
+
+				var fore:FlxSprite = new FlxSprite(-500, -200).loadGraphic(Paths.getImageFunk('bfStage/fg'));
+				fore.antialiasing = true;
+				fore.active = false;
+				add(fore);
+			case 'atlantaStage':
+				curStage = 'atlantaStage';
+
+				defaultCamZoom = 0.7;
+
+				var bg:FlxSprite = new FlxSprite(-625, -200).loadGraphic(Paths.getImageFunk('ghoti/bg'));
+				bg.antialiasing = true;
+				bg.active = false;
+				add(bg);
+			case 'prismaStage':
+				defaultCamZoom = 0.8;
+				curStage = 'prismaStage';
+				var bg = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/space"));
+				bg.antialiasing = true;
+				bg.scrollFactor.set();
+				bg.screenCenter(XY);
+				add(bg);
+
+				var sun = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/sun"));
+				sun.setPosition(FlxG.width / 2 - sun.width / 2, -125);
+				sun.antialiasing = true;
+				sun.scrollFactor.set(0.2, 0.2);
+				add(sun);
+
+				mtn = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/mountain"));
+				mtn.setPosition(FlxG.width / 2 - mtn.width / 2, 100);
+				mtn.antialiasing = true;
+				mtn.scrollFactor.set(0.33, 0.33);
+				add(mtn);
+
+				skewScale = -0.1;
+				skewGrid = new FlxSkewedSprite();
+				skewGrid.loadGraphic(Paths.getImageFunk("prismaStage/tile"));
+				skewGrid.antialiasing = true;
+				skewGrid.setPosition(FlxG.width / 2 - skewGrid.width / 2, 600);
+				add(skewGrid);
+			case 'prismaStage2':
+				defaultCamZoom = 0.8;
+				curStage = 'prismaStage';
+				var bg = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/space"));
+				bg.antialiasing = true;
+				bg.scrollFactor.set();
+				bg.screenCenter(XY);
+				add(bg);
+
+				var sun = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/moon"));
+				sun.setPosition(FlxG.width / 2 - sun.width / 2, -175);
+				sun.antialiasing = true;
+				sun.scrollFactor.set(0.2, 0.2);
+				add(sun);
+
+				mtn = new FlxSprite().loadGraphic(Paths.getImageFunk("prismaStage/city"));
+				mtn.setPosition(FlxG.width / 2 - mtn.width / 2, -100);
+				mtn.antialiasing = true;
+				mtn.scrollFactor.set(0.33, 0.33);
+				add(mtn);
+
+				skewScale = -0.07;
+				skewGrid = new FlxSkewedSprite();
+				skewGrid.loadGraphic(Paths.getImageFunk("prismaStage/tile2"));
+				skewGrid.antialiasing = true;
+				skewGrid.setPosition(FlxG.width / 2 - skewGrid.width / 2, 600);
+				add(skewGrid);
+			default:
+				defaultCamZoom = 0.9;
+				curStage = 'stage';
+				var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.getImageFunk("stage/stageback2"));
+				bg.antialiasing = true;
+				bg.scrollFactor.set(0.9, 0.9);
+				bg.active = false;
+				bg.antialiasing = true;
+				add(bg);
+
+				// var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.getImagePNG("stage/stagefront"));
+				// stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
+				// stageFront.updateHitbox();
+				// stageFront.antialiasing = true;
+				// stageFront.scrollFactor.set(0.9, 0.9);
+				// stageFront.active = false;
+				// stageFront.antialiasing = true;
+				// add(stageFront);
+
+				var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.getImageFunk("stage/stagecurtains"));
+				stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
+				stageCurtains.updateHitbox();
+				stageCurtains.antialiasing = true;
+				stageCurtains.scrollFactor.set(1.3, 1.3);
+				stageCurtains.active = false;
+				stageCurtains.antialiasing = true;
+				add(stageCurtains);
 		}
-	}
-
-	// Note Hit/Miss
-	override function goodNoteHit(note:Note)
-	{
-		// Code here
-	}
-
-	override function opponentNoteHit(note:Note)
-	{
-		// Code here
-	}
-
-	override function noteMiss(note:Note)
-	{
-		// Code here
-	}
-
-	override function noteMissPress(direction:Int)
-	{
-		// Code here
 	}
 }
