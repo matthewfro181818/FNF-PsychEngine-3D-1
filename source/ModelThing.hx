@@ -96,7 +96,7 @@ class ModelThing
 		flipSingAnims = character.isPlayer;
         
 		#if MODS_ALLOWED
-		if (!FileSystem.exists('assets/models/' + character.modelName + '/' + character.modelName + '.md2'))
+		if (!FileSystem.exists('assets/shared/models/' + character.modelName + '/' + character.modelName + '.md2'))
 		{
 			trace("ERROR: MODEL OF NAME '" + character.modelName + ".md2' CAN'T BE FOUND!");
 			return;
