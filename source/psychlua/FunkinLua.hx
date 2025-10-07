@@ -1023,16 +1023,6 @@ class FunkinLua {
 					GameOverSubstate.instance.insert(GameOverSubstate.instance.members.indexOf(GameOverSubstate.instance.boyfriend), mySprite);
 			}
 		});
-		Lua_helper.add_callback(lua, "addLuaObj", function(tag:String, modelpath:String, image:String, smooth:Bool = true) {
-			if(PlayState.instance.modchartViews.exists(tag)) {
-				var cool:ModchartView = PlayState.instance.modchartViews.get(tag);
-				if(cool.wasAdded) {
-					cool.addModel(Paths.obj(modelpath), function(mesh) {
-						
-					}, image, smooth);
-				}
-			}
-		});
 		Lua_helper.add_callback(lua, "setGraphicSize", function(obj:String, x:Float, y:Float = 0, updateHitbox:Bool = true) {
 			if(game.getLuaObject(obj)!=null) {
 				var shit:FlxSprite = game.getLuaObject(obj);
@@ -1858,3 +1848,4 @@ class FunkinLua {
 	}
 }
 #end
+
