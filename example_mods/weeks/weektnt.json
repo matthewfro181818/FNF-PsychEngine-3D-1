@@ -1,0 +1,28 @@
+{
+	"songs": [
+		["Kickin", "bf", [49, 176, 209]],
+		["Bopeebo", "dad", [146, 113, 253]],
+		["Revenant", "spooky", [34, 51, 68]],
+		["Trigger-Happy", "pico", [148, 22, 83]],
+		["Playtime", "mom", [252, 150, 215]],
+		["Tune-A-Fish", "atlanta", [76, 107, 155]],
+		["zombie-Flower", "lily", [154, 48, 0]],
+		["SiO2", "prisma", [159, 213, 237]],
+		["Fresnel", "prisma", [159, 213, 237]]
+	],
+
+	"weekCharacters": [
+		"",
+		"bf",
+		"gf"
+	],
+	"weekBackground": "",
+
+	"storyName": "",
+	"weekBefore": "tutorial",
+	"weekName": "Tutorial",
+	"startUnlocked": true,
+
+	"hideStoryMode": false,
+	"hideFreeplay": false
+}
