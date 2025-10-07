@@ -7,6 +7,8 @@ import flixel.util.FlxDestroyUtil;
 
 import flixel.FlxObject;
 
+import flixel.graphics.FlxGraphic;
+
 import openfl.utils.AssetType;
 import openfl.utils.Assets;
 import haxe.Json;
@@ -91,6 +93,9 @@ class Character extends FlxSprite
 	public var initWidth:Float = -1;
 	public var initFrameWidth:Int = -1;
 	public var initHeight:Float;
+
+	public var camOffsets:Array<Float> = [0, 0];
+	public var posOffsets:Array<Float> = [0, 0];
 
 	// 3D
 	public var isModel:Bool = false;
