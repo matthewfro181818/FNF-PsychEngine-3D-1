@@ -555,7 +555,7 @@ class PlayState extends MusicBeatState
 		reloadHealthBarColors();
 		uiGroup.add(healthBar);
 
-		healthBarP1 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
+		healthBarP1 = new FlxSprite().loadGraphic(Paths.image("healthBar2Inner"));
 		healthBarP1.setPosition(healthBar.x
 			+ healthBar.width / 2
 			- healthBarP1.width / 2,
@@ -566,7 +566,7 @@ class PlayState extends MusicBeatState
 		add(healthBarP1);
 
 
-		healthBarP2 = new FlxSprite().loadGraphic(Paths.getImagePNG("healthBar2Inner"));
+		healthBarP2 = new FlxSprite().loadGraphic(Paths.image("healthBar2Inner"));
 		healthBarP2.setPosition(healthBar.x
 			+ healthBar.width / 2
 			- healthBarP2.width / 2,
