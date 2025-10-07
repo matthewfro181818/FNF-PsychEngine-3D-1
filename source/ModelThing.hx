@@ -94,12 +94,20 @@ class ModelThing
 		yOffset = character.yOffset;
 		zOffset = character.zOffset;
 		flipSingAnims = character.isPlayer;
-
+        
+		#if MODS_ALLOWED
 		if (!FileSystem.exists('assets/models/' + character.modelName + '/' + character.modelName + '.md2'))
 		{
 			trace("ERROR: MODEL OF NAME '" + character.modelName + ".md2' CAN'T BE FOUND!");
 			return;
 		}
+		#else
+		if (!FileSystem.exists('mods/models/' + character.modelName + '/' + character.modelName + '.md2'))
+		{
+			trace("ERROR: MODEL OF NAME '" + character.modelName + ".md2' CAN'T BE FOUND!");
+			return;
+		}
+		#end
 
 		modelBytes = ByteArray.fromFile('assets/models/' + character.modelName + '/' + character.modelName + '.md2');
 		Asset3DLibrary.loadData(modelBytes, null, null, new MD2Parser());
